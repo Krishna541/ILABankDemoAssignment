@@ -9,25 +9,34 @@ import com.ilabank.utils.Constant.Companion.SLIDER_IMAGE_COUNT
 
 class DashboardViewModel : BaseModel(){
 
-    private val repository = DashboardRepository()
+    private val dashboardrepository = DashboardDataRepository()
 
-    private val _carouselData = MutableLiveData<List<ListItemModel>>()
-    val carouselData: LiveData<List<ListItemModel>> = _carouselData
+    val DataItem = MutableLiveData<List<ListItemModel>>()
+    val listData: LiveData<List<ListItemModel>> = DataItem
 
-    private val _selectedCarouselListData = MutableLiveData<List<ListItemDataModel>>()
-    val selectedCarouselListItemData: LiveData<List<ListItemDataModel>> = _selectedCarouselListData
+    private val GetSelectedListData = MutableLiveData<List<ListItemDataModel>>()
+    val selectedListRecyclerItemData: LiveData<List<ListItemDataModel>> = GetSelectedListData
 
+    /* Function to bind / Fill Data in Recyclerview*/
+    fun passDatatoFillRecyclerView(listData : List<ListItemDataModel>){
+        GetSelectedListData.value = listData
+    }
+    /*END*/
+
+    /*set Dataitem value from dynamiclist from repository*/
     init {
-        _carouselData.value =
-            repository.dynamicCarouselData(SLIDER_IMAGE_COUNT, LIST_ITEM_COUNT)
+        DataItem.value =
+            dashboardrepository.GetdynamicListData(SLIDER_IMAGE_COUNT, LIST_ITEM_COUNT)
     }
 
-    fun postDataToCarousel(carouselListItemData: List<ListItemDataModel>) {
-        _selectedCarouselListData.postValue(carouselListItemData)
+    /*END*/
+
+    fun getpositionwiseListData(position: Int) : List<ListItemDataModel>? {
+        return DataItem.value?.get(position)?.data ?: listOf()
     }
 
     fun getDataWithRespectToPosition(position: Int): List<ListItemDataModel> {
-        return _carouselData.value?.get(position)?.data ?: listOf()
+        return DataItem.value?.get(position)?.data ?: listOf()
     }
 
 

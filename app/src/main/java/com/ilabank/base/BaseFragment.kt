@@ -13,39 +13,25 @@ import androidx.navigation.fragment.NavHostFragment
 
 abstract class BaseFragment : Fragment(),BaseNavigator {
 
-    private lateinit var binding: ViewDataBinding
+    private lateinit var baseviewbinding: ViewDataBinding
 
-    @Override
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(mview: View, savedInstanceState: Bundle?) {
+        onIntializedView(baseviewbinding, mview)
+        super.onViewCreated(mview, savedInstanceState)
     }
 
     @Override
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        layoutinflater: LayoutInflater,
+        containerview: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, getLayoutID(), container, false)
-        return binding.root
+        baseviewbinding = DataBindingUtil.inflate(layoutinflater, getLayoutID(), containerview, false)
+        return baseviewbinding.root
     }
 
-    open fun moveToFragment(@IdRes fragmentactionID: Int) {
-        NavHostFragment.findNavController(this).navigate(fragmentactionID)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        onIntializedView(binding, view)
-        super.onViewCreated(view, savedInstanceState)
-    }
-
-
-    fun finish() {
-        (activity as BaseActivity).finish()
-    }
-
-    fun onBackPressed(){
-        (activity as BaseActivity).finish()
+    open fun moveToDashboardFragment(@IdRes fragmentID: Int) {
+        NavHostFragment.findNavController(this).navigate(fragmentID)
     }
 
 

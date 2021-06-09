@@ -3,7 +3,7 @@
     package="com.ilabank">
 
     <application
-        android:name=".MyILAApp"
+        android:name=".MyILABankApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

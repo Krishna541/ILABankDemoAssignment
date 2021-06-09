@@ -8,6 +8,8 @@
         <entry key="..\:/Krishna/ILABankDemo/app/src/main/res/drawable-xxxhdpi/ic_action_trending.xml" value="0.1" />
         <entry key="..\:/Krishna/ILABankDemo/app/src/main/res/drawable/active_dot.xml" value="0.19444444444444445" />
         <entry key="..\:/Krishna/ILABankDemo/app/src/main/res/drawable/default_dot.xml" value="0.1" />
+        <entry key="..\:/Krishna/ILABankDemo/app/src/main/res/drawable/selected_dot.xml" value="0.2046875" />
+        <entry key="..\:/Krishna/ILABankDemo/app/src/main/res/drawable/tab_activator.xml" value="0.20416666666666666" />
         <entry key="..\:/Krishna/ILABankDemo/app/src/main/res/drawable/tab_selector.xml" value="0.19444444444444445" />
         <entry key="..\:/Krishna/ILABankDemo/app/src/main/res/layout/activity_main.xml" value="0.12771739130434784" />
         <entry key="..\:/Krishna/ILABankDemo/app/src/main/res/layout/dashboard_item_fragment.xml" value="0.1" />

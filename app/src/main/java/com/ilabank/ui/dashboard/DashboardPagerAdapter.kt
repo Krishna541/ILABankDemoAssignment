@@ -11,36 +11,36 @@ import com.ilabank.databinding.DashboardItemFragmentBinding
 import com.ilabank.models.pojo.ListItemModel
 
 
-class DashboardViewPagerAdapter : PagerAdapter() {
+class DashboardPagerAdapter : PagerAdapter() {
 
-    var dataList: List<ListItemModel> = arrayListOf()
+    var viewpagerdataList: List<ListItemModel> = arrayListOf()
 
     override fun isViewFromObject(view: View, Object: Any): Boolean {
         return view === Object as ConstraintLayout
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val binding = DataBindingUtil.inflate<DashboardItemFragmentBinding>(
+        val viewpagerbinding = DataBindingUtil.inflate<DashboardItemFragmentBinding>(
             LayoutInflater.from(container.context),
             R.layout.dashboard_item_fragment,
             container,
             false
         )
-
-        binding.ivSliderImage.setImageResource(dataList[position].SliderImage)
-        container.addView(binding.root)
-        return binding.root
+        viewpagerbinding.ivSliderImage.setImageResource(viewpagerdataList[position].SliderImage)
+        container.addView(viewpagerbinding.root)
+        return viewpagerbinding.root
     }
 
-    override fun getCount(): Int = dataList.size
+    fun addDataIntoViewPager(list: List<ListItemModel>) {
+        viewpagerdataList = list
+        notifyDataSetChanged()
+    }
+
+    override fun getCount(): Int = viewpagerdataList.size
 
     override fun destroyItem(container: ViewGroup, position: Int, Object: Any) {
         container.removeView(Object as ConstraintLayout)
     }
 
 
-    fun addItems(list: List<ListItemModel>) {
-        dataList = list
-        notifyDataSetChanged()
-    }
 }

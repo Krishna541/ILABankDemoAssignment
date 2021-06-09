@@ -10,48 +10,56 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ilabank.R
 import com.ilabank.databinding.DashboardListItemRowBinding
 import com.ilabank.models.pojo.ListItemDataModel
-import com.ilabank.utils.FilterListItem
+import com.ilabank.utils.FilterDataListItem
 
 
-class DashboardRecyclerAdapter(val showEmptyView: (Boolean) -> Unit) :
+class DashboardRecyclerAdapter :
     ListAdapter<ListItemDataModel, DashboardRecyclerAdapter.DashboardRecyclerViewHolder>(
-        CarouselListDataItemCallback()
-    ),
+        ListDataItemCallback()),
     Filterable {
 
-    var dataList = listOf<ListItemDataModel>()
+    var recyclerdataList = listOf<ListItemDataModel>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DashboardRecyclerViewHolder {
-        val binding = DataBindingUtil.inflate<DashboardListItemRowBinding>(
-            LayoutInflater.from(parent.context),
-            R.layout.dashboard_list_item_row,
-            parent,
-            false)
-        return DashboardRecyclerViewHolder(binding)
+    override fun onCreateViewHolder(viewgroup: ViewGroup, viewType: Int): DashboardRecyclerViewHolder {
+
+        return DashboardRecyclerViewHolder(
+            DataBindingUtil.inflate(
+                LayoutInflater.from(viewgroup.context),
+                R.layout.dashboard_list_item_row,
+                viewgroup,
+                false
+            ) as DashboardListItemRowBinding)
+
     }
+
+    fun setList(data: List<ListItemDataModel>) {
+        recyclerdataList = data
+        submitList(data)
+    }
+
+    /*function to filter data from list */
+    override fun getFilter(): Filter {
+        return FilterDataListItem<ListItemDataModel>(recyclerdataList) {
+            submitList(it)
+        }
+    }
+    /*END*/
+
+    /*Viewholder Class to bind component with Data*/
+    class DashboardRecyclerViewHolder(private val mBinding: DashboardListItemRowBinding) :
+        RecyclerView.ViewHolder(mBinding.root) {
+        fun bind(ListItemItemData: ListItemDataModel) {
+            mBinding.sliderImageListItemData = ListItemItemData
+            mBinding.executePendingBindings()
+        }
+    }
+
+    /*END*/
+
 
     override fun onBindViewHolder(holder: DashboardRecyclerViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    fun setOriginalList(data: List<ListItemDataModel>) {
-        dataList = data
-        submitList(data)
-    }
-
-    class DashboardRecyclerViewHolder(private val mBinding: DashboardListItemRowBinding) :
-        RecyclerView.ViewHolder(mBinding.root) {
-        fun bind(carouselListItemItemData: ListItemDataModel) {
-            mBinding.sliderImageListItemData = carouselListItemItemData
-            mBinding.executePendingBindings()
-        }
-    }
-
-    override fun getFilter(): Filter {
-        return FilterListItem<ListItemDataModel>(dataList) {
-            submitList(it)
-            showEmptyView(it.isNullOrEmpty())
-        }
-    }
 }
 

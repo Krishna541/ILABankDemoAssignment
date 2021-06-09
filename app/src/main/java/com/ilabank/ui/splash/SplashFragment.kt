@@ -13,25 +13,20 @@ import kotlinx.coroutines.launch
 
 class SplashFragment : BaseFragment() {
 
-    private lateinit var fragmentsplashbinding: FragmentSplashBinding
-    private val mainScope = CoroutineScope(Dispatchers.Main)
+    lateinit var fragmentsplashbinding: FragmentSplashBinding
 
     override fun onResume() {
         super.onResume()
-        (activity as BaseActivity).supportActionBar?.hide()
-        RedirectToDashboard()
+        redirectToDashboard()
     }
 
-    fun RedirectToDashboard(){
-        mainScope.launch {
-            fragmentsplashbinding.ivLogo.postDelayed({
-                moveToFragment(R.id.action_splash_to_dashboardFragment)
-            }, DELAY_TIME)
-        }
+    fun redirectToDashboard(){
+        fragmentsplashbinding.imgLogo.postDelayed({
+            moveToDashboardFragment(R.id.redirect_splash_to_dashboardFragment)
+        }, DELAY_TIME)
     }
 
     override fun onError(error: String) {
-
     }
 
     override fun onBack() {

@@ -3,56 +3,61 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Transition
-        app:constraintSetEnd="@id/end"
         app:constraintSetStart="@id/start"
-        app:duration="900"
-        app:motionInterpolator="easeOut">
+        app:constraintSetEnd="@id/end"
+        app:motionInterpolator="easeOut"
+        app:duration="700">
+
         <OnSwipe
+            app:touchAnchorSide="end"
+            app:touchAnchorId="@+id/rcyclervw_list"
             app:dragDirection="dragUp"
-            app:touchAnchorId="@+id/rv_carousel"
-            app:touchAnchorSide="end" />
+           />
+
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
 
         <Constraint
-            android:id="@+id/vp_slider"
+            android:id="@+id/viewpager_slider"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dimen_200"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_height="@dimen/dimen_220">
 
         </Constraint>
 
         <Constraint
-            android:id="@+id/tl_bottom_dots"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/bottom_dots"
             android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@id/vp_slider"
+            app:layout_constraintBottom_toBottomOf="@id/viewpager_slider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:tabGravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:tabIndicatorHeight="0dp" />
 
         <Constraint
-            android:id="@+id/slider_main"
+            android:id="@+id/main_constralyl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tl_bottom_dots">
+            app:layout_constraintTop_toBottomOf="@id/bottom_dots">
 
             <CustomAttribute
                 app:attributeName="backgroundColor"
-                app:customColorValue="@android:color/darker_gray" />
+                app:customColorValue="@color/color_app_icon" />
+
         </Constraint>
+
         <Constraint
-            android:id="@+id/empty_view"
+            android:id="@+id/txt_empty"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/slider_main"
+            android:layout_height="0dp"
             app:visibilityMode="ignore" />
 
     </ConstraintSet>
@@ -60,44 +65,47 @@
     <ConstraintSet android:id="@+id/end">
 
         <Constraint
-            android:id="@+id/vp_slider"
+            android:id="@+id/viewpager_slider"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:alpha="0"
-            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:alpha="0"
+            android:visibility="visible" />
 
         <Constraint
-            android:id="@+id/tl_bottom_dots"
+            android:id="@+id/bottom_dots"
             android:layout_width="wrap_content"
             android:layout_height="?attr/actionBarSize"
             android:alpha="0"
             android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@id/vp_slider"
+            app:layout_constraintBottom_toBottomOf="@id/viewpager_slider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Constraint
-            android:id="@+id/slider_main"
+            android:id="@+id/main_constralyl"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tl_bottom_dots">
+            app:layout_constraintTop_toBottomOf="@id/bottom_dots"
+            android:layout_height="wrap_content">
 
             <CustomAttribute
                 app:attributeName="backgroundColor"
-                app:customColorValue="@color/purple_700" />
+                app:customColorValue="@color/color_app_icon" />
+
         </Constraint>
+
         <Constraint
-            android:id="@+id/empty_view"
+            android:id="@+id/txt_empty"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/slider_main"
+            android:layout_height="0dp"
             app:visibilityMode="ignore" />
+
     </ConstraintSet>
 </MotionScene>

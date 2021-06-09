@@ -24,7 +24,10 @@
     <dimen name="dimen_30">30dp</dimen>
     <dimen name="dimen_40">40dp</dimen>
     <dimen name="dimen_150">150dp</dimen>
+    <dimen name="dimen_170">170dp</dimen>
     <dimen name="dimen_200">200dp</dimen>
+    <dimen name="dimen_210">210dp</dimen>
+    <dimen name="dimen_220">220dp</dimen>
     <dimen name="txtsize_13">13sp</dimen>
     <dimen name="txtsize_20">20sp</dimen>
     <dimen name="txtsize_22">22sp</dimen>

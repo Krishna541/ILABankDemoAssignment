@@ -7,5 +7,5 @@ interface BaseNavigator {
     fun onError(error: String)
     fun onBack()
     fun getLayoutID() : Int
-    fun onIntializedView(binding: ViewDataBinding, view: View)
+    fun onIntializedView(viewbinding: ViewDataBinding, view: View)
 }

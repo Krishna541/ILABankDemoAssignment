@@ -1,39 +1,31 @@
 package com.ilabank.ui.dashboard
 
+import android.util.Log
 import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView.OnEditorActionListener
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.viewpager.widget.ViewPager
-import com.ilabank.activity.MainActivity
 import com.ilabank.R
 import com.ilabank.base.BaseFragment
 import com.ilabank.databinding.FragmentDashboardBinding
 import com.ilabank.utils.TextAfterChange
-import com.ilabank.utils.gone
-import com.ilabank.utils.hideKeyboard
-import com.ilabank.utils.visible
 
 
 class DashboardFragment : BaseFragment() {
 
-    private lateinit var mViewBinding: FragmentDashboardBinding
-    private lateinit var dashboardRecyclerAdapter: DashboardRecyclerAdapter
-    private lateinit var dashboardViewPagerAdapter: DashboardViewPagerAdapter
-    private val mViewModel: DashboardViewModel by activityViewModels()
-
-    override fun onResume() {
-        super.onResume()
-        (activity as MainActivity).supportActionBar?.show()
-    }
+    /*// Initialize adapter for viewpager recycleradpater and dashboarddata viewmodel*/
+    val dashboardViewModel: DashboardViewModel by activityViewModels()
+    lateinit var dashboardRecyclerviewAdapter: DashboardRecyclerAdapter
+    lateinit var dashboardBinding: FragmentDashboardBinding
+    lateinit var DashboardSliderViewpagerAdapter: DashboardPagerAdapter
+    /*END*/
 
     override fun onError(error: String) {
-
+        Log.d("onError",error)
     }
 
     override fun onBack() {
+        activity?.finish()
     }
 
     override fun getLayoutID(): Int {
@@ -41,97 +33,102 @@ class DashboardFragment : BaseFragment() {
     }
 
     override fun onIntializedView(binding: ViewDataBinding, view: View) {
-        mViewBinding = binding as FragmentDashboardBinding
-        setUpListeners()
-        setUpObservers()
-        setUpViewPager()
-        setUpRecyclerView()
+        dashboardBinding = binding as FragmentDashboardBinding
+
+        // initialize all listener / Set Sliderpager , Set Adapter for Recyclerview
+        init()
+        /*END*/
+    }
+
+    private fun init() {
+        dashboardRecyclerviewAdapter = DashboardRecyclerAdapter()
+        setUpSliderViewPager()
+        setRecyclerViewAdapter()
+        handleListenerforsliderViewpager()
+        setDataFromLifeCyclerObserver()
     }
 
 
-    private fun setUpViewPager() {
-        dashboardViewPagerAdapter = DashboardViewPagerAdapter()
-        mViewBinding.vpSlider.adapter = dashboardViewPagerAdapter
-        mViewBinding.tlBottomDots.setupWithViewPager(mViewBinding.vpSlider, true)
+    private fun setUpSliderViewPager() {
+        DashboardSliderViewpagerAdapter = DashboardPagerAdapter()
+        dashboardBinding.viewpagerSlider.adapter = DashboardSliderViewpagerAdapter
+        dashboardBinding.bottomDots.setupWithViewPager(dashboardBinding.viewpagerSlider, true)
     }
 
 
-    private fun setUpRecyclerView() {
-        mViewModel.postDataToCarousel(mViewModel.getDataWithRespectToPosition(0))
-        dashboardRecyclerAdapter = DashboardRecyclerAdapter {
-            if (it) {
-                mViewBinding.emptyView.visible()
-            } else {
-                mViewBinding.emptyView.gone()
-            }
+    private fun setRecyclerViewAdapter() {
+        dashboardViewModel.getpositionwiseListData(0)?.let {
+            dashboardViewModel.passDatatoFillRecyclerView(
+                it
+            )
         }
-        mViewBinding.rvCarousel.run {
-            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-            adapter = dashboardRecyclerAdapter
+
+        if(dashboardRecyclerviewAdapter != null){
+            dashboardBinding.txtEmpty.visibility = View.GONE
+        }else{
+            dashboardBinding.txtEmpty.visibility = View.VISIBLE
         }
+
+        /*Set Adapter of Recyclerview*/
+        dashboardBinding.rcyclervwList.adapter = dashboardRecyclerviewAdapter
+        /*END*/
     }
 
+    private fun setDataFromLifeCyclerObserver() {
+        /* observer viewpager list for Viewpager/Slider image*/
+        dashboardViewModel.DataItem.observe(viewLifecycleOwner, {
+            DashboardSliderViewpagerAdapter.addDataIntoViewPager(it)
+        })
+        /*END*/
 
-    private fun setUpListeners() {
-        mViewBinding.vpSlider.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        /* set List for Recyclerviewlist*/
+        dashboardViewModel.selectedListRecyclerItemData.observe(viewLifecycleOwner, {
+            dashboardRecyclerviewAdapter.setList(it)
+        })
+        /*END*/
+    }
+
+    /*handle event after page selection*/
+    private fun handleListenerforsliderViewpager() {
+        dashboardBinding.viewpagerSlider.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
             override fun onPageScrollStateChanged(state: Int) {
+                Log.d("getstate",state.toString())
             }
-
             override fun onPageScrolled(
                 position: Int,
                 positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
+                positionOffsetPixels: Int) {
             }
 
             override fun onPageSelected(position: Int) {
-
-                mViewModel.postDataToCarousel(
-                    mViewModel.getDataWithRespectToPosition(
-                        position
+                dashboardViewModel.getpositionwiseListData(
+                    position
+                )?.let {
+                    dashboardViewModel.passDatatoFillRecyclerView(
+                        it
                     )
-                )
-            }
-        })
-
-        mViewBinding.etSearch.addTextChangedListener(TextAfterChange {
-            dashboardRecyclerAdapter.filter.filter(it)
-        })
-
-        mViewBinding.etSearch.setOnClickListener {
-            mViewBinding.rootMotionLayout.transitionToEnd()
-            mViewBinding.rootMotionLayout.requestFocus()
-        }
-
-        mViewBinding.etSearch.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                mViewBinding.etSearch.hideKeyboard()
-                return@OnEditorActionListener true
-            }
-            false
-        })
-
-        mViewBinding.etSearch.setOnFocusChangeListener { v, hasFocus ->
-            run {
-                if (hasFocus) {
-                    mViewBinding.rootMotionLayout.transitionToEnd()
                 }
             }
+        })
+
+        dashboardBinding.edtSearch.setOnClickListener {
+            dashboardBinding.motionLayout.transitionToEnd()
         }
 
+        /*Search on TextChange Listener Event*/
+        dashboardBinding.edtSearch.addTextChangedListener(TextAfterChange {
+            dashboardRecyclerviewAdapter.filter.filter(it)
+        })
+        /*END*/
+
+        dashboardBinding.edtSearch.setOnFocusChangeListener { v, hasFocus ->
+            if(hasFocus){
+                dashboardBinding.motionLayout.transitionToEnd()
+            }
+        }
 
     }
-
-
-    private fun setUpObservers() {
-        mViewModel.carouselData.observe(viewLifecycleOwner, {
-            dashboardViewPagerAdapter.addItems(it)
-        })
-
-        mViewModel.selectedCarouselListItemData.observe(viewLifecycleOwner, {
-            dashboardRecyclerAdapter.setOriginalList(it)
-        })
-    }
+    /*END*/
 
 }

@@ -2,10 +2,9 @@ package com.ilabank
 
 import android.app.Application
 
-class MyILAApp : Application() {
+class MyILABankApp : Application() {
 
-    var context: MyILAApp? = null
-    private val TAG: String = MyILAApp::class.java.simpleName
+    var context: MyILABankApp? = null
 
     override fun onCreate() {
         super.onCreate()
